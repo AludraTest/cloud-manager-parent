@@ -344,6 +344,7 @@
 								<mkdir dir="conqat/engine" />
 								<get src="https://www.cqse.eu/download/conqat/conqat-binary-2015.2.zip" dest="conqat/engine/conqat.zip" skipexisting="true" />
 								<unzip src="conqat/engine/conqat.zip" dest="conqat/engine" overwrite="false" />
+								<chmod file="${basedir}/conqat/engine/conqat-2015.2/bin/conqat.sh" perm="ugo+x" />
 								<!-- run conqat -->
 								<exec executable="${basedir}/conqat/engine/conqat-2015.2/bin/conqat.sh" osfamily="unix">
 									<arg value="-f" />
