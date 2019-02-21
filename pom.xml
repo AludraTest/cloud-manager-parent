@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.aludratest</groupId>
 	<artifactId>cloud-manager-parent</artifactId>
@@ -9,9 +10,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- set to "deploy site-deploy" in subprojects to also deploy project's 
-			site to GitHub. -->
+		<!-- set to "deploy site-deploy" in subprojects to also deploy project's site to GitHub. -->
 		<aludratest.release.goals>deploy</aludratest.release.goals>
+		<spring.version>4.3.4.RELEASE</spring.version>
+		<springboot.version>1.5.8.RELEASE</springboot.version>
 	</properties>
 
 	<licenses>
@@ -43,25 +45,22 @@
 		</developer>
 	</developers>
 
+	<!-- use Spring as IoC container -->
 	<dependencies>
 		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-container-default</artifactId>
-			<version>1.6</version>
-			<!-- exclude google collections, as it conflicts with Guava (required 
-				by Selenium) -->
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.collections</groupId>
-					<artifactId>google-collections</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-component-annotations</artifactId>
-			<version>1.6</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -78,11 +77,21 @@
 				<artifactId>commons-io</artifactId>
 				<version>2.4</version>
 			</dependency>
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>2.8.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>20141113</version>
+			</dependency>
 
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.11</version>
+				<version>4.12</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -101,8 +110,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -146,7 +155,7 @@
 					<fail>true</fail>
 				</configuration>
 			</plugin>
-			
+
 			<!-- check license headers -->
 			<plugin>
 				<groupId>com.mycila</groupId>
@@ -176,7 +185,7 @@
 
 				</executions>
 			</plugin>
-			
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -200,8 +209,7 @@
 
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -320,7 +328,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- download an run ConQAT analysis when Profile is active -->
 		<profile>
 			<id>run-conqat</id>
@@ -335,7 +343,9 @@
 							<execution>
 								<id>download-and-run-conqat</id>
 								<phase>site</phase>
-								<goals><goal>run</goal></goals>
+								<goals>
+									<goal>run</goal>
+								</goals>
 							</execution>
 						</executions>
 						<configuration>
@@ -359,7 +369,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 	</profiles>
 
 
@@ -367,8 +377,8 @@
 		<connection>scm:git:https://git@github.com:AludraTest/cloud-manager-parent.git</connection>
 		<developerConnection>scm:git:https://git@github.com/AludraTest/cloud-manager-parent.git</developerConnection>
 		<url>https://github.com/AludraTest/cloud-manager-parent.git</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<issueManagement>
 		<url>https://github.com/AludraTest/cloud-manager-parent/issues</url>
@@ -385,8 +395,7 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 		<site>
-			<!-- this is not used at all, as GitHub site-deploy is used. But site 
-				Plugin requires this to be here to work! -->
+			<!-- this is not used at all, as GitHub site-deploy is used. But site Plugin requires this to be here to work! -->
 			<id>local-dummy</id>
 			<url>file:/./target/site-deployment</url>
 		</site>
